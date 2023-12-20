@@ -2,6 +2,8 @@ let c;
 let angle = 0;
 let sound;
 let isPlaying = true; // Variable to track the sound state
+let isAnimating = true; // Variable to track the animation state
+let circles = []; // Array to store circle data
 
 function preload() {
   soundFormats('mp3', 'ogg');
@@ -36,11 +38,13 @@ function draw() {
   strokeWeight(80); // Adjust the border thickness as needed
   rect(0, 0, width, height);
 
-  // Draw the four circles inside each other with light grey outer and third rings
-  drawNestedCircles(width / 2, height / 2, 4, 300, 90, 40); // Adjust the circle parameters as needed
+  // Draw the circles only when animating or paused
+  drawNestedCircles(width / 2, height / 2, 4, 300, 90, 40);
 
   // Update the angle for animation
-  angle += 0.02;
+  if (isAnimating) {
+    angle += 0.02;
+  }
 }
 
 function drawNestedCircles(x, y, numCircles, startingDiameter, gap, fourthCircleSize) {
@@ -48,25 +52,24 @@ function drawNestedCircles(x, y, numCircles, startingDiameter, gap, fourthCircle
     let currentDiameter;
 
     if (i === 1) {
-      // Make the second circle broader with yin-yang
-      currentDiameter = startingDiameter - i * gap * 1.2 + sin(angle) * 20; // Adjust the multiplier and amplitude as needed
-      fill(255, 150); // Other outer circles (you can adjust the color)
-      drawYinYang(x, y, currentDiameter); // Draw yin-yang for the second circle
-      continue; // Skip drawing the second circle separately
+      currentDiameter = startingDiameter - i * gap * 1.2 + sin(angle) * 20;
+      fill(255, 150);
+      drawYinYang(x, y, currentDiameter);
+      continue;
     } else {
       currentDiameter = startingDiameter - i * gap;
     }
 
-    noStroke(); // No outline for circles
+    noStroke();
 
     if (i === 0 || i === 2) {
-      fill(200); // Light grey for outer and third rings
+      fill(200);
     } else if (i === 3) {
-      fill(255, 150); // Other outer circles (you can adjust the color)
-      drawReverseYinYang(x, y, fourthCircleSize); // Draw reverse yin-yang for the fourth circle
-      continue; // Skip drawing the fourth circle separately
+      fill(255, 150);
+      drawReverseYinYang(x, y, fourthCircleSize);
+      continue;
     } else {
-      fill(0, 0); // Fully transparent for inner circles
+      fill(0, 0);
     }
 
     ellipse(x, y, currentDiameter, currentDiameter);
@@ -76,41 +79,42 @@ function drawNestedCircles(x, y, numCircles, startingDiameter, gap, fourthCircle
         drawYinYang(x, y, currentDiameter);
       }
     }
+
+    // Store circle data for redrawing when paused
+    circles[i] = { x, y, diameter: currentDiameter };
   }
 }
 
 function drawYinYang(x, y, diameter) {
   let radius = diameter / 2;
 
-  fill(255); // White color for yin-yang symbol
-  arc(x, y, diameter, diameter, PI / 2, -PI / 2, CHORD); // Upper half
+  fill(255);
+  arc(x, y, diameter, diameter, PI / 2, -PI / 2, CHORD);
 
-  fill(0); // Black color for yin-yang symbol
-  arc(x, y, diameter, diameter, -PI / 2, PI / 2, CHORD); // Lower half
+  fill(0);
+  arc(x, y, diameter, diameter, -PI / 2, PI / 2, CHORD);
 
-  // Small circles for eyes
-  fill(255); // White color for eyes
-  ellipse(x - diameter * 0.25, y, diameter * 0.2); // Left eye
+  fill(255);
+  ellipse(x - diameter * 0.25, y, diameter * 0.2);
 
-  fill(0); // Black color for eyes
-  ellipse(x + diameter * 0.25, y, diameter * 0.2); // Right eye
+  fill(0);
+  ellipse(x + diameter * 0.25, y, diameter * 0.2);
 }
 
 function drawReverseYinYang(x, y, diameter) {
   let radius = diameter / 2;
 
-  fill(0); // Black color for reverse yin-yang symbol
-  arc(x, y, diameter, diameter, PI / 2, -PI / 2, CHORD); // Lower half
+  fill(0);
+  arc(x, y, diameter, diameter, PI / 2, -PI / 2, CHORD);
 
-  fill(255); // White color for reverse yin-yang symbol
-  arc(x, y, diameter, diameter, -PI / 2, PI / 2, CHORD); // Upper half
+  fill(255);
+  arc(x, y, diameter, diameter, -PI / 2, PI / 2, CHORD);
 
-  // Small circles for eyes
-  fill(0); // Black color for eyes
-  ellipse(x - diameter * 0.25, y, diameter * 0.2); // Left eye
+  fill(0);
+  ellipse(x - diameter * 0.25, y, diameter * 0.2);
 
-  fill(255); // White color for eyes
-  ellipse(x + diameter * 0.25, y, diameter * 0.2); // Right eye
+  fill(255);
+  ellipse(x + diameter * 0.25, y, diameter * 0.2);
 }
 
 function centerCanvas() {
@@ -127,8 +131,31 @@ function mousePressed() {
   // Toggle pause/play when the mouse is pressed
   if (isPlaying) {
     sound.pause();
+    noLoop(); // Stop the animation loop
   } else {
     sound.loop();
+    loop(); // Resume the animation loop
   }
   isPlaying = !isPlaying;
+
+  // Toggle animation pause/resume when the mouse is pressed
+  isAnimating = !isAnimating;
+
+  // Redraw circles when paused
+  if (!isAnimating) {
+    for (let i = 0; i < circles.length; i++) {
+      let { x, y, diameter } = circles[i];
+      if (i === 1 || i === 3) {
+        fill(255, 150);
+        if (i === 1) {
+          drawYinYang(x, y, diameter);
+        } else {
+          drawReverseYinYang(x, y, diameter);
+        }
+      } else {
+        fill(i === 0 || i === 2 ? 200 : 0, 0);
+        ellipse(x, y, diameter, diameter);
+      }
+    }
+  }
 }
