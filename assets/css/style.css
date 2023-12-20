@@ -1,0 +1,5 @@
+body {
+    background-color: #add8e6; /* Light blue color */
+    margin: 0; /* Remove default margin */
+    overflow: hidden; /* Prevent scrollbars */
+  }
