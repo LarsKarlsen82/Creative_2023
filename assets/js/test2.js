@@ -34,14 +34,14 @@ function draw() {
     fill(0);
     rect(height / 2, 0, height / 2, width);
   
-    // Draw the first color (RGB: 222, 184, 135)
-    stroke(222, 184, 135);
+    // Draw the first color (RGB: 240, 220, 190)
+    stroke(240, 220, 190);
     strokeWeight(80);
     noFill();
     rect(0, 0, height, width);
   
     // Draw the second color (RGB: 205, 170, 125)
-    stroke(205, 170, 125);
+    stroke(210, 190, 160);
     rect(0, 0, height, width);
   
     // Draw the circles only when animating or paused
@@ -70,14 +70,14 @@ function drawNestedCircles(x, y, numCircles, startingDiameter, gap, fourthCircle
     noStroke();
 
     if (i === 0 || i === 2) {
-      fill(222, 184, 135);
+      fill(240, 220, 190);
     } else if (i === 3) {
       fill(0, 150);
       drawReverseYinYang(x, y, fourthCircleSize);
       continue;
     } else {
-      fill(0, 0);
-    }
+        fill(200, 180, 150); // Another pale color
+      }
 
     ellipse(x, y, currentDiameter, currentDiameter);
 

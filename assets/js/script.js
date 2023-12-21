@@ -10,8 +10,16 @@ function preload() {
   sound = loadSound('./assets/sound/Breathing_Sound_Effect.mp3');
 }
 
+// function setup() {
+//   c = createCanvas(900, 600);
+//   centerCanvas();
+
+//   // Start the sound loop
+//   sound.loop();
+// }
+
 function setup() {
-  c = createCanvas(900, 600);
+  c = createCanvas(windowWidth, windowHeight); // Use windowWidth and windowHeight for responsive canvas
   centerCanvas();
 
   // Start the sound loop
@@ -131,6 +139,7 @@ function centerCanvas() {
 }
 
 function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
   centerCanvas();
 }
 
@@ -165,4 +174,6 @@ function mousePressed() {
       }
     }
   }
+    // Prevent default touch behavior
+    return false;
 }
