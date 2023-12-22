@@ -10,21 +10,21 @@ function preload() {
   sound = loadSound('./assets/sound/Breathing_Sound_Effect.mp3');
 }
 
-// function setup() {
-//   c = createCanvas(900, 600);
-//   centerCanvas();
-
-//   // Start the sound loop
-//   sound.loop();
-// }
-
 function setup() {
-  c = createCanvas(windowWidth, windowHeight); // Use windowWidth and windowHeight for responsive canvas
+  c = createCanvas(900, 600);
   centerCanvas();
 
   // Start the sound loop
   sound.loop();
 }
+
+// function setup() {
+//   c = createCanvas(windowWidth, windowHeight); // Use windowWidth and windowHeight for responsive canvas
+//   centerCanvas();
+
+//   // Start the sound loop
+//   sound.loop();
+// }
 
 function draw() {
     background(255); // White background

@@ -166,3 +166,13 @@ function mousePressed() {
     }
   }
 }
+
+
+
+{
+    name: "Breaths",
+    text: "Sophie Dupont, 429 Breaths \n \n Værken '429 Breaths' er en del af serien 'Spatula Breath Paintings', der udtrykker en abstrakt udfoldelse af kunstnerens egen vejrtrækning, idet en dyb indånding går forud for hvert penselstrøg.",
+    js_file_name: "Breaths.js",
+    og_img_file_name: "Breaths_original.jpg",
+    mod_img_file_name: "Breaths_copy.jpg",
+  },
